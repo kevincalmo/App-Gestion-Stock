@@ -6,7 +6,13 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import {
+  Button,
+  Flex,
+  Grid,
+  SwitchField,
+  TextField,
+} from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { User } from "../models";
 import { fetchByPath, validateField } from "./utils";
@@ -14,7 +20,7 @@ import { DataStore } from "aws-amplify";
 export default function UserUpdateForm(props) {
   const {
     id: idProp,
-    user,
+    user: userModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -25,40 +31,47 @@ export default function UserUpdateForm(props) {
   } = props;
   const initialValues = {
     email: "",
-    username: "",
+    isAdmin: false,
+    sub: "",
   };
   const [email, setEmail] = React.useState(initialValues.email);
-  const [username, setUsername] = React.useState(initialValues.username);
+  const [isAdmin, setIsAdmin] = React.useState(initialValues.isAdmin);
+  const [sub, setSub] = React.useState(initialValues.sub);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = userRecord
       ? { ...initialValues, ...userRecord }
       : initialValues;
     setEmail(cleanValues.email);
-    setUsername(cleanValues.username);
+    setIsAdmin(cleanValues.isAdmin);
+    setSub(cleanValues.sub);
     setErrors({});
   };
-  const [userRecord, setUserRecord] = React.useState(user);
+  const [userRecord, setUserRecord] = React.useState(userModelProp);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = idProp ? await DataStore.query(User, idProp) : user;
+      const record = idProp
+        ? await DataStore.query(User, idProp)
+        : userModelProp;
       setUserRecord(record);
     };
     queryData();
-  }, [idProp, user]);
+  }, [idProp, userModelProp]);
   React.useEffect(resetStateValues, [userRecord]);
   const validations = {
-    email: [{ type: "Email" }],
-    username: [],
+    email: [{ type: "Required" }, { type: "Email" }],
+    isAdmin: [{ type: "Required" }],
+    sub: [{ type: "Required" }],
   };
   const runValidationTasks = async (
     fieldName,
     currentValue,
     getDisplayValue
   ) => {
-    const value = getDisplayValue
-      ? getDisplayValue(currentValue)
-      : currentValue;
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -77,7 +90,8 @@ export default function UserUpdateForm(props) {
         event.preventDefault();
         let modelFields = {
           email,
-          username,
+          isAdmin,
+          sub,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -126,7 +140,7 @@ export default function UserUpdateForm(props) {
     >
       <TextField
         label="Email"
-        isRequired={false}
+        isRequired={true}
         isReadOnly={false}
         value={email}
         onChange={(e) => {
@@ -134,7 +148,8 @@ export default function UserUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               email: value,
-              username,
+              isAdmin,
+              sub,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -149,30 +164,57 @@ export default function UserUpdateForm(props) {
         hasError={errors.email?.hasError}
         {...getOverrideProps(overrides, "email")}
       ></TextField>
+      <SwitchField
+        label="Is admin"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={isAdmin}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              email,
+              isAdmin: value,
+              sub,
+            };
+            const result = onChange(modelFields);
+            value = result?.isAdmin ?? value;
+          }
+          if (errors.isAdmin?.hasError) {
+            runValidationTasks("isAdmin", value);
+          }
+          setIsAdmin(value);
+        }}
+        onBlur={() => runValidationTasks("isAdmin", isAdmin)}
+        errorMessage={errors.isAdmin?.errorMessage}
+        hasError={errors.isAdmin?.hasError}
+        {...getOverrideProps(overrides, "isAdmin")}
+      ></SwitchField>
       <TextField
-        label="Username"
-        isRequired={false}
+        label="Sub"
+        isRequired={true}
         isReadOnly={false}
-        value={username}
+        value={sub}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
               email,
-              username: value,
+              isAdmin,
+              sub: value,
             };
             const result = onChange(modelFields);
-            value = result?.username ?? value;
+            value = result?.sub ?? value;
           }
-          if (errors.username?.hasError) {
-            runValidationTasks("username", value);
+          if (errors.sub?.hasError) {
+            runValidationTasks("sub", value);
           }
-          setUsername(value);
+          setSub(value);
         }}
-        onBlur={() => runValidationTasks("username", username)}
-        errorMessage={errors.username?.errorMessage}
-        hasError={errors.username?.hasError}
-        {...getOverrideProps(overrides, "username")}
+        onBlur={() => runValidationTasks("sub", sub)}
+        errorMessage={errors.sub?.errorMessage}
+        hasError={errors.sub?.hasError}
+        {...getOverrideProps(overrides, "sub")}
       ></TextField>
       <Flex
         justifyContent="space-between"
@@ -185,7 +227,7 @@ export default function UserUpdateForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || user)}
+          isDisabled={!(idProp || userModelProp)}
           {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
@@ -197,7 +239,7 @@ export default function UserUpdateForm(props) {
             type="submit"
             variation="primary"
             isDisabled={
-              !(idProp || user) ||
+              !(idProp || userModelProp) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, "SubmitButton")}

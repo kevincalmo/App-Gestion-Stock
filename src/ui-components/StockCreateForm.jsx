@@ -6,18 +6,12 @@
 
 /* eslint-disable */
 import * as React from "react";
-import {
-  Button,
-  Flex,
-  Grid,
-  SwitchField,
-  TextField,
-} from "@aws-amplify/ui-react";
+import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
-import { User } from "../models";
+import { Stock } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
-export default function UserCreateForm(props) {
+export default function StockCreateForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
@@ -29,24 +23,16 @@ export default function UserCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    email: "",
-    isAdmin: false,
-    sub: "",
+    name: "",
   };
-  const [email, setEmail] = React.useState(initialValues.email);
-  const [isAdmin, setIsAdmin] = React.useState(initialValues.isAdmin);
-  const [sub, setSub] = React.useState(initialValues.sub);
+  const [name, setName] = React.useState(initialValues.name);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setEmail(initialValues.email);
-    setIsAdmin(initialValues.isAdmin);
-    setSub(initialValues.sub);
+    setName(initialValues.name);
     setErrors({});
   };
   const validations = {
-    email: [{ type: "Required" }, { type: "Email" }],
-    isAdmin: [{ type: "Required" }],
-    sub: [{ type: "Required" }],
+    name: [{ type: "Required" }],
   };
   const runValidationTasks = async (
     fieldName,
@@ -74,9 +60,7 @@ export default function UserCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          email,
-          isAdmin,
-          sub,
+          name,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -106,7 +90,7 @@ export default function UserCreateForm(props) {
               modelFields[key] = undefined;
             }
           });
-          await DataStore.save(new User(modelFields));
+          await DataStore.save(new Stock(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
           }
@@ -119,86 +103,32 @@ export default function UserCreateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "UserCreateForm")}
+      {...getOverrideProps(overrides, "StockCreateForm")}
       {...rest}
     >
       <TextField
-        label="Email"
+        label="Name"
         isRequired={true}
         isReadOnly={false}
-        value={email}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              email: value,
-              isAdmin,
-              sub,
+              name: value,
             };
             const result = onChange(modelFields);
-            value = result?.email ?? value;
+            value = result?.name ?? value;
           }
-          if (errors.email?.hasError) {
-            runValidationTasks("email", value);
+          if (errors.name?.hasError) {
+            runValidationTasks("name", value);
           }
-          setEmail(value);
+          setName(value);
         }}
-        onBlur={() => runValidationTasks("email", email)}
-        errorMessage={errors.email?.errorMessage}
-        hasError={errors.email?.hasError}
-        {...getOverrideProps(overrides, "email")}
-      ></TextField>
-      <SwitchField
-        label="Is admin"
-        defaultChecked={false}
-        isDisabled={false}
-        isChecked={isAdmin}
-        onChange={(e) => {
-          let value = e.target.checked;
-          if (onChange) {
-            const modelFields = {
-              email,
-              isAdmin: value,
-              sub,
-            };
-            const result = onChange(modelFields);
-            value = result?.isAdmin ?? value;
-          }
-          if (errors.isAdmin?.hasError) {
-            runValidationTasks("isAdmin", value);
-          }
-          setIsAdmin(value);
-        }}
-        onBlur={() => runValidationTasks("isAdmin", isAdmin)}
-        errorMessage={errors.isAdmin?.errorMessage}
-        hasError={errors.isAdmin?.hasError}
-        {...getOverrideProps(overrides, "isAdmin")}
-      ></SwitchField>
-      <TextField
-        label="Sub"
-        isRequired={true}
-        isReadOnly={false}
-        value={sub}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              email,
-              isAdmin,
-              sub: value,
-            };
-            const result = onChange(modelFields);
-            value = result?.sub ?? value;
-          }
-          if (errors.sub?.hasError) {
-            runValidationTasks("sub", value);
-          }
-          setSub(value);
-        }}
-        onBlur={() => runValidationTasks("sub", sub)}
-        errorMessage={errors.sub?.errorMessage}
-        hasError={errors.sub?.hasError}
-        {...getOverrideProps(overrides, "sub")}
+        onBlur={() => runValidationTasks("name", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, "name")}
       ></TextField>
       <Flex
         justifyContent="space-between"
