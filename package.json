@@ -14,6 +14,9 @@
     "@aws-amplify/datastore": "^4.2.1",
     "@aws-amplify/ui-components": "^1.9.40",
     "@aws-amplify/ui-react": "^4.6.1",
+    "@chakra-ui/react": "^2.6.1",
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
     "@types/node": "20.0.0",
     "@types/react": "18.2.5",
     "@types/react-dom": "18.2.4",
@@ -21,9 +24,12 @@
     "aws-amplify": "^5.2.0",
     "eslint": "8.39.0",
     "eslint-config-next": "13.4.1",
+    "framer-motion": "^10.12.8",
     "next": "13.4.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-icon": "^1.0.0",
+    "react-icons": "^4.8.0",
     "typescript": "5.0.4"
   }
 }
