@@ -6,11 +6,21 @@ import {withAuthenticator} from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 import {useEffect, useState} from "react";
 import {User} from "@/models";
-import {Center, ChakraProvider, Spinner} from "@chakra-ui/react";
+import {Center, ChakraProvider, extendTheme, Spinner} from "@chakra-ui/react";
 
 Amplify.configure({
     ...awsExports,
     ssr: true,
+});
+
+const theme = extendTheme({
+    colors: {
+        primary: "#02A4FF",
+        secondary: "#0081CC",
+        accent: "#FFA602",
+        bgLight: "#F0F0F0",
+        bgDark: "#2B2B2B",
+    }
 });
 
 function App({Component, pageProps}: AppProps) {
@@ -56,6 +66,7 @@ function App({Component, pageProps}: AppProps) {
         const value = Object.fromEntries(data.entries());
         console.log(value);
     };
+
     if (isLoading) return (<Center h={"100%"}>
         <Spinner
             thickness="4px"
@@ -67,7 +78,7 @@ function App({Component, pageProps}: AppProps) {
     </Center>);
 
     // @ts-ignore
-    return <ChakraProvider><Component {...pageProps} /></ChakraProvider>;
+    return <ChakraProvider theme={theme}><Component {...pageProps} /></ChakraProvider>;
 }
 
 export default withAuthenticator(App);

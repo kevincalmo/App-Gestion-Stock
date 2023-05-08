@@ -13,7 +13,7 @@ const HomeHeading = ({title = "Titre de rubrique", content = <>Hello</>}: { titl
                 height='100%'
             >
                 <Box
-                    bg="blue.500"
+                    bg="primary"
                     width="100%"
                     height="100px"
                 >
