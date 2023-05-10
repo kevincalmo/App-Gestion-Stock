@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, {ReactNode, ReactText, useContext, useEffect} from "react";
 import {
     IconButton,
     Avatar,
@@ -21,7 +21,7 @@ import {
     MenuDivider,
     MenuItem,
     MenuList,
-} from '@chakra-ui/react';
+} from "@chakra-ui/react";
 import {
     FiHome,
     FiTrendingUp,
@@ -30,34 +30,43 @@ import {
     FiSettings,
     FiMenu,
     FiBell,
-    FiChevronDown,
-} from 'react-icons/fi';
-import { IconType } from 'react-icons';
-import { ReactText } from 'react';
+    FiChevronDown, FiUsers, FiList, FiPackage, FiTruck,
+} from "react-icons/fi";
+import {IconType} from "react-icons";
+import StockDisplay from "@/components/StockDisplay";
+import {CustomDivider} from "@/components/CustomDivider";
+import {StockContext} from "@/context/StockContext";
+import {Amplify, Auth, DataStore} from "aws-amplify";
+import {User} from "@/models";
 
 interface LinkItemProps {
     name: string;
     icon: IconType;
+    link?: string;
 }
+
 const LinkItems: Array<LinkItemProps> = [
-    { name: 'Home', icon: FiHome },
-    { name: 'Trending', icon: FiTrendingUp },
-    { name: 'Explore', icon: FiCompass },
-    { name: 'Favourites', icon: FiStar },
-    { name: 'Settings', icon: FiSettings },
+    {name: "Accueil", icon: FiHome, link: "/"},
+    {name: "Agents", icon: FiUsers, link: "/agents"},
+    {name: "Produits", icon: FiPackage,link: "/produits"},
+    {name: "Commandes", icon: FiList, link: "/commandes"},
+    {name: "Fournisseurs", icon: FiTruck, link: "/fournisseurs"},
 ];
 
 export default function SidebarWithHeader({
                                               children,
+                                              stocks,
                                           }: {
     children: ReactNode;
+    stocks: any;
 }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
-        <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
+        <Box minH="100vh" bg={useColorModeValue("bgLight", "bgDark")}>
             <SidebarContent
+                stocks={stocks}
                 onClose={() => onClose}
-                display={{ base: 'none', md: 'block' }}
+                display={{base: "none", md: "block"}}
             />
             <Drawer
                 autoFocus={false}
@@ -68,7 +77,7 @@ export default function SidebarWithHeader({
                 onOverlayClick={onClose}
                 size="full">
                 <DrawerContent>
-                    <SidebarContent onClose={onClose} />
+                    <SidebarContent onClose={onClose} stocks={stocks}/>
                 </DrawerContent>
             </Drawer>
             {/* mobilenav */}
@@ -82,27 +91,67 @@ export default function SidebarWithHeader({
 
 interface SidebarProps extends BoxProps {
     onClose: () => void;
+    stocks: any;
 }
 
-const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+const SidebarContent = ({onClose, stocks, ...rest}: SidebarProps) => {
+    const [activeStock, setActiveStock] = React.useState<string | null>(null);
+
+    useEffect(()=>{
+        setActiveStock(localStorage.getItem("activeStockId"));
+    },[])
+    const handleStockChange = async (id: string) => {
+        try {
+            // Je mets à jour mon stock actif en fonction de mon utilisateur
+            const user = await Amplify.Auth.currentAuthenticatedUser();
+            const userDB = await DataStore.query(User, (u: any) => u.sub.eq(user.attributes.sub));
+            const currentUser = userDB[0];
+            await DataStore.save(
+                User.copyOf(currentUser, (updated) => {
+                    updated.activeStockID = id;
+                })
+            );
+            // Je mets mon stock au niveau de mon context
+            setActiveStock(id);
+            // Je l'enregistre  dans mon localStorage
+            localStorage.setItem("activeStockId", id);
+            window.location.reload();
+
+        } catch (e) {
+            console.log(e);
+        }
+    };
     return (
         <Box
             transition="3s ease"
-            bg={useColorModeValue('white', 'gray.900')}
+            bg={useColorModeValue("primary", "secondary")}
             borderRight="1px"
-            borderRightColor={useColorModeValue('gray.200', 'gray.700')}
-            w={{ base: 'full', md: 60 }}
+            borderRightColor={useColorModeValue("gray.200", "gray.700")}
+            w={{base: "full", md: 60}}
             pos="fixed"
             h="full"
             {...rest}>
             <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
                 <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-                    Logo
+                    Gestion Stock
                 </Text>
-                <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
+                <CloseButton display={{base: "flex", md: "none"}} onClick={onClose}/>
             </Flex>
+            <CustomDivider/>
+            {/*Stocks */}
+            {stocks?.map((stock: any, index: number) => (
+                <StockDisplay
+                    onClick={() => {
+                        handleStockChange(stock.id);
+                    }}
+                    key={index}
+                    name={stock.name}
+                    isActive={activeStock === stock.id}/>
+            ))}
+            {/*End stocks*/}
+            <CustomDivider/>
             {LinkItems.map((link) => (
-                <NavItem key={link.name} icon={link.icon}>
+                <NavItem key={link.name} icon={link.icon} link={link.link}>
                     {link.name}
                 </NavItem>
             ))}
@@ -113,10 +162,12 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 interface NavItemProps extends FlexProps {
     icon: IconType;
     children: ReactText;
+    link?: string;
 }
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+
+const NavItem = ({icon, children, link, ...rest}: NavItemProps) => {
     return (
-        <Link href="#" style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
+        <Link href={link ?? "#"} style={{textDecoration: "none"}} _focus={{boxShadow: "none"}}>
             <Flex
                 align="center"
                 p="4"
@@ -125,8 +176,8 @@ const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
                 role="group"
                 cursor="pointer"
                 _hover={{
-                    bg: 'cyan.400',
-                    color: 'white',
+                    bg: "cyan.400",
+                    color: "white",
                 }}
                 {...rest}>
                 {icon && (
@@ -134,7 +185,7 @@ const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
                         mr="4"
                         fontSize="16"
                         _groupHover={{
-                            color: 'white',
+                            color: "white",
                         }}
                         as={icon}
                     />
@@ -169,11 +220,11 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
             />
 
             <Text
-                display={{ base: 'flex', md: 'none' }}
+                display={{base: "flex", md: "none"}}
                 fontSize="2xl"
                 fontFamily="monospace"
                 fontWeight="bold">
-                Logo
+                Gestion Stock
             </Text>
 
             <HStack spacing={{ base: '0', md: '6' }}>
@@ -197,7 +248,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                                     }
                                 />
                                 <VStack
-                                    display={{ base: 'none', md: 'flex' }}
+                                    display={{base: "none", md: "flex"}}
                                     alignItems="flex-start"
                                     spacing="1px"
                                     ml="2">
@@ -206,19 +257,28 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                                         Admin
                                     </Text>
                                 </VStack>
-                                <Box display={{ base: 'none', md: 'flex' }}>
-                                    <FiChevronDown />
+                                <Box display={{base: "none", md: "flex"}}>
+                                    <FiChevronDown/>
                                 </Box>
                             </HStack>
                         </MenuButton>
                         <MenuList
-                            bg={useColorModeValue('white', 'gray.900')}
-                            borderColor={useColorModeValue('gray.200', 'gray.700')}>
-                            <MenuItem>Profile</MenuItem>
+                            bg={useColorModeValue("white", "gray.900")}
+                            borderColor={useColorModeValue("gray.200", "gray.700")}>
+                            <MenuItem>
+                                <Link href={"/profile"} style={{textDecoration: "none"}} _focus={{boxShadow: "none"}}>
+                                    Profile
+                                </Link>
+                            </MenuItem>
                             <MenuItem>Settings</MenuItem>
                             <MenuItem>Billing</MenuItem>
-                            <MenuDivider />
-                            <MenuItem>Sign out</MenuItem>
+                            <MenuDivider/>
+                            <MenuItem onClick={async () => {
+                                await Auth.signOut();
+                                window.location.reload();
+                            }}>
+                                Sign out
+                            </MenuItem>
                         </MenuList>
                     </Menu>
                 </Flex>
