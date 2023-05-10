@@ -3,6 +3,7 @@ import {Box, Center, Flex, Heading, Stack} from "@chakra-ui/react";
 const HomeHeading = ({title = "Titre de rubrique", content = <>Hello</>}: { title: string, content: any }) => {
     return (
         <Box
+            margin={{base:'20px 0'}}
             width={{base: "100%"}}
             height={{base: "155px"}}
             bg="white"
