@@ -4,7 +4,6 @@ import {Amplify, withSSRContext} from "aws-amplify";
 import {serializeModel} from "@aws-amplify/datastore/ssr";
 import {Stock, User, UserStock} from "@/models";
 import HomeHeading from "@/components/HomeHeading";
-import {addAndUpdateActiveStock} from "@/services/AddandUpdateActiveStock";
 import {StockContext} from "@/context/StockContext";
 
 export default function Home({user, stocks}: any) {
