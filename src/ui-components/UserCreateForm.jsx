@@ -32,21 +32,35 @@ export default function UserCreateForm(props) {
     email: "",
     isAdmin: false,
     sub: "",
+    activeStockID: "",
+    username: "",
+    gender: "",
   };
   const [email, setEmail] = React.useState(initialValues.email);
   const [isAdmin, setIsAdmin] = React.useState(initialValues.isAdmin);
   const [sub, setSub] = React.useState(initialValues.sub);
+  const [activeStockID, setActiveStockID] = React.useState(
+    initialValues.activeStockID
+  );
+  const [username, setUsername] = React.useState(initialValues.username);
+  const [gender, setGender] = React.useState(initialValues.gender);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setEmail(initialValues.email);
     setIsAdmin(initialValues.isAdmin);
     setSub(initialValues.sub);
+    setActiveStockID(initialValues.activeStockID);
+    setUsername(initialValues.username);
+    setGender(initialValues.gender);
     setErrors({});
   };
   const validations = {
     email: [{ type: "Required" }, { type: "Email" }],
     isAdmin: [{ type: "Required" }],
     sub: [{ type: "Required" }],
+    activeStockID: [],
+    username: [],
+    gender: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -77,6 +91,9 @@ export default function UserCreateForm(props) {
           email,
           isAdmin,
           sub,
+          activeStockID,
+          username,
+          gender,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -134,6 +151,9 @@ export default function UserCreateForm(props) {
               email: value,
               isAdmin,
               sub,
+              activeStockID,
+              username,
+              gender,
             };
             const result = onChange(modelFields);
             value = result?.email ?? value;
@@ -160,6 +180,9 @@ export default function UserCreateForm(props) {
               email,
               isAdmin: value,
               sub,
+              activeStockID,
+              username,
+              gender,
             };
             const result = onChange(modelFields);
             value = result?.isAdmin ?? value;
@@ -186,6 +209,9 @@ export default function UserCreateForm(props) {
               email,
               isAdmin,
               sub: value,
+              activeStockID,
+              username,
+              gender,
             };
             const result = onChange(modelFields);
             value = result?.sub ?? value;
@@ -199,6 +225,93 @@ export default function UserCreateForm(props) {
         errorMessage={errors.sub?.errorMessage}
         hasError={errors.sub?.hasError}
         {...getOverrideProps(overrides, "sub")}
+      ></TextField>
+      <TextField
+        label="Active stock id"
+        isRequired={false}
+        isReadOnly={false}
+        value={activeStockID}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              email,
+              isAdmin,
+              sub,
+              activeStockID: value,
+              username,
+              gender,
+            };
+            const result = onChange(modelFields);
+            value = result?.activeStockID ?? value;
+          }
+          if (errors.activeStockID?.hasError) {
+            runValidationTasks("activeStockID", value);
+          }
+          setActiveStockID(value);
+        }}
+        onBlur={() => runValidationTasks("activeStockID", activeStockID)}
+        errorMessage={errors.activeStockID?.errorMessage}
+        hasError={errors.activeStockID?.hasError}
+        {...getOverrideProps(overrides, "activeStockID")}
+      ></TextField>
+      <TextField
+        label="Username"
+        isRequired={false}
+        isReadOnly={false}
+        value={username}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              email,
+              isAdmin,
+              sub,
+              activeStockID,
+              username: value,
+              gender,
+            };
+            const result = onChange(modelFields);
+            value = result?.username ?? value;
+          }
+          if (errors.username?.hasError) {
+            runValidationTasks("username", value);
+          }
+          setUsername(value);
+        }}
+        onBlur={() => runValidationTasks("username", username)}
+        errorMessage={errors.username?.errorMessage}
+        hasError={errors.username?.hasError}
+        {...getOverrideProps(overrides, "username")}
+      ></TextField>
+      <TextField
+        label="Gender"
+        isRequired={false}
+        isReadOnly={false}
+        value={gender}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              email,
+              isAdmin,
+              sub,
+              activeStockID,
+              username,
+              gender: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.gender ?? value;
+          }
+          if (errors.gender?.hasError) {
+            runValidationTasks("gender", value);
+          }
+          setGender(value);
+        }}
+        onBlur={() => runValidationTasks("gender", gender)}
+        errorMessage={errors.gender?.errorMessage}
+        hasError={errors.gender?.hasError}
+        {...getOverrideProps(overrides, "gender")}
       ></TextField>
       <Flex
         justifyContent="space-between"

@@ -12,6 +12,9 @@ type User @model @auth(rules: [{allow: public}]) {
   isAdmin: Boolean!
   sub: String!
   Stocks: [Stock] @manyToMany(relationName: "UserStock")
+  activeStockID: String
+  username: String
+  gender: String
 }
 
 type Stock @model @auth(rules: [{allow: public}]) {
