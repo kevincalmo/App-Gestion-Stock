@@ -7,6 +7,7 @@ import "@aws-amplify/ui-react/styles.css";
 import {useEffect, useState} from "react";
 import {User} from "@/models";
 import {Center, ChakraProvider, extendTheme, Spinner} from "@chakra-ui/react";
+import {StockActiveProvider} from "@/context/StockActiveProvider";
 
 Amplify.configure({
     ...awsExports,
@@ -24,62 +25,49 @@ const theme = extendTheme({
 });
 
 function App({Component, pageProps}: AppProps) {
-    const [isLoading, setIsLoading] = useState(false);
-    let n = 0;
+    const [isLoading, setIsLoading] = useState(true);
+    const [authUser, setAuthUser] = useState(null);
+
     useEffect(() => {
-        if (n === 0) {
-            (async function () {
+
+        Amplify.Auth.currentAuthenticatedUser()
+            .then((user:any) => user.attributes.sub && setAuthUser(user))
+            .catch((err:any) => console.log(err));
+    }, []);
+
+    useEffect(() => {
+        if (authUser) {
+            (async function() {
                 setIsLoading(true);
                 try {
-
-                    const auth = await Amplify.Auth.currentAuthenticatedUser();
-                    const userDb = await DataStore.query(User, (u) => u.sub.eq(auth.attributes.sub));
+                    // @ts-ignore
+                    const userDb = await DataStore.query(User, (u) => u.sub.eq(authUser.attributes.sub));
                     if (userDb.length === 0) {
                         await DataStore.save(
                             new User({
                                 // @ts-ignore
-                                name: auth.attributes.name,
-                                email: auth.attributes.email,
+                                name: authUser.attributes.name,
+                                // @ts-ignore
+                                email: authUser.attributes.email,
                                 isAdmin: false,
-                                sub: auth.attributes.sub
+                                // @ts-ignore
+                                sub: authUser.attributes.sub
                             })
                         );
                         console.log("User create !");
-                        setIsLoading(false);
-                    } else {
-                        console.log("User already exist !");
-                        setIsLoading(false);
                     }
                 } catch (e) {
-                    setIsLoading(false);
                     console.log("ERROR : " + e);
+                } finally {
+                    setIsLoading(false);
                 }
             })();
-            n++;
         }
+    }, [authUser]);
 
-    }, [n]);
-
-    const handleSubmit = async (event: any) => {
-        event.preventDefault();
-        const data = new FormData(event.target);
-        const value = Object.fromEntries(data.entries());
-        console.log(value);
-    };
-
-    if (isLoading) return (<Center h={"100%"}>
-        <Spinner
-            thickness="4px"
-            speed="0.65s"
-            emptyColor="gray.200"
-            color="blue.500"
-            size="xl"
-        />
-    </Center>);
-
-    // @ts-ignore
-    return <ChakraProvider theme={theme}><Component {...pageProps} /></ChakraProvider>;
+// @ts-ignore
+    return <ChakraProvider theme={theme}><StockActiveProvider><Component {...pageProps} /></StockActiveProvider></ChakraProvider>;
 }
 
-export default withAuthenticator(App);
+export default App;
 
