@@ -1,9 +1,9 @@
 import React from 'react';
 import SidebarWithHeader from "@/layout/Sidebar";
 
-const Layout = ({children}: any) => {
+const Layout = ({children,stocks}: any) => {
     return (
-        <SidebarWithHeader>
+        <SidebarWithHeader stocks={stocks}>
             {children}
         </SidebarWithHeader>
     );
