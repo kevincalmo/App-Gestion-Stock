@@ -136,6 +136,27 @@ export const schema = {
                         ]
                     }
                 },
+                "activeStockID": {
+                    "name": "activeStockID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "username": {
+                    "name": "username",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "gender": {
+                    "name": "gender",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -371,5 +392,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.2",
-    "version": "d016b9624df2dc03388246dbbf003f60"
+    "version": "21ea82826533c41f3a3b5e5f1e1b5508"
 };

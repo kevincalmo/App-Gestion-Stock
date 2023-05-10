@@ -50,6 +50,9 @@ type EagerUser = {
   readonly isAdmin: boolean;
   readonly sub: string;
   readonly Stocks?: (UserStock | null)[] | null;
+  readonly activeStockID?: string | null;
+  readonly username?: string | null;
+  readonly gender?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -64,6 +67,9 @@ type LazyUser = {
   readonly isAdmin: boolean;
   readonly sub: string;
   readonly Stocks: AsyncCollection<UserStock>;
+  readonly activeStockID?: string | null;
+  readonly username?: string | null;
+  readonly gender?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
