@@ -1,3 +1,32 @@
+type ProductSizeQuantity @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  sizeID: ID! @index(name: "bySize")
+  productID: ID! @index(name: "byProduct")
+  quantity: Int!
+}
+
+type Size @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  label: String!
+  categoriesproductID: ID! @index(name: "byCategoriesProduct")
+  ProductSizeQuantities: [ProductSizeQuantity] @hasMany(indexName: "bySize", fields: ["id"])
+}
+
+type CategoriesProduct @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  label: String
+  Products: [Product] @hasMany(indexName: "byCategoriesProduct", fields: ["id"])
+  Sizes: [Size] @hasMany(indexName: "byCategoriesProduct", fields: ["id"])
+}
+
+type Product @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  label: String!
+  stockID: ID! @index(name: "byStock")
+  categoriesproductID: ID! @index(name: "byCategoriesProduct")
+  ProductSizeQuantities: [ProductSizeQuantity] @hasMany(indexName: "byProduct", fields: ["id"])
+}
+
 type Agent @model @auth(rules: [{allow: public}]) {
   id: ID!
   last_name: String!
@@ -22,5 +51,6 @@ type Stock @model @auth(rules: [{allow: public}]) {
   name: String!
   users: [User] @manyToMany(relationName: "UserStock")
   Agents: [Agent] @hasMany(indexName: "byStock", fields: ["id"])
+  Products: [Product] @hasMany(indexName: "byStock", fields: ["id"])
 }
  
