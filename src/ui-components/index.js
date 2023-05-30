@@ -5,6 +5,10 @@
  **************************************************************************/
 
 export { default as studioTheme } from "./studioTheme";
+export { default as SupplierCreateForm } from "./SupplierCreateForm";
+export { default as SupplierUpdateForm } from "./SupplierUpdateForm";
+export { default as CategoriesProductCreateForm } from "./CategoriesProductCreateForm";
+export { default as CategoriesProductUpdateForm } from "./CategoriesProductUpdateForm";
 export { default as UserCreateForm } from "./UserCreateForm";
 export { default as UserUpdateForm } from "./UserUpdateForm";
 export { default as StockCreateForm } from "./StockCreateForm";

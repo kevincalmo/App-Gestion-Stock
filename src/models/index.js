@@ -4,9 +4,14 @@ import { schema } from './schema';
 
 
 
-const { Agent, User, Stock, UserStock } = initSchema(schema);
+const { Supplier, ProductSizeQuantity, Size, CategoriesProduct, Product, Agent, User, Stock, UserStock } = initSchema(schema);
 
 export {
+  Supplier,
+  ProductSizeQuantity,
+  Size,
+  CategoriesProduct,
+  Product,
   Agent,
   User,
   Stock,

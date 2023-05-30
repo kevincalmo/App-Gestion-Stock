@@ -6,6 +6,166 @@ import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@a
 
 
 
+type EagerSupplier = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Supplier, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazySupplier = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Supplier, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Supplier = LazyLoading extends LazyLoadingDisabled ? EagerSupplier : LazySupplier
+
+export declare const Supplier: (new (init: ModelInit<Supplier>) => Supplier) & {
+  copyOf(source: Supplier, mutator: (draft: MutableModel<Supplier>) => MutableModel<Supplier> | void): Supplier;
+}
+
+type EagerProductSizeQuantity = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<ProductSizeQuantity, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly sizeID: string;
+  readonly productID: string;
+  readonly quantity: number;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyProductSizeQuantity = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<ProductSizeQuantity, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly sizeID: string;
+  readonly productID: string;
+  readonly quantity: number;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type ProductSizeQuantity = LazyLoading extends LazyLoadingDisabled ? EagerProductSizeQuantity : LazyProductSizeQuantity
+
+export declare const ProductSizeQuantity: (new (init: ModelInit<ProductSizeQuantity>) => ProductSizeQuantity) & {
+  copyOf(source: ProductSizeQuantity, mutator: (draft: MutableModel<ProductSizeQuantity>) => MutableModel<ProductSizeQuantity> | void): ProductSizeQuantity;
+}
+
+type EagerSize = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Size, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly label: string;
+  readonly categoriesproductID: string;
+  readonly ProductSizeQuantities?: (ProductSizeQuantity | null)[] | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazySize = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Size, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly label: string;
+  readonly categoriesproductID: string;
+  readonly ProductSizeQuantities: AsyncCollection<ProductSizeQuantity>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Size = LazyLoading extends LazyLoadingDisabled ? EagerSize : LazySize
+
+export declare const Size: (new (init: ModelInit<Size>) => Size) & {
+  copyOf(source: Size, mutator: (draft: MutableModel<Size>) => MutableModel<Size> | void): Size;
+}
+
+type EagerCategoriesProduct = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<CategoriesProduct, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly label?: string | null;
+  readonly Products?: (Product | null)[] | null;
+  readonly Sizes?: (Size | null)[] | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyCategoriesProduct = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<CategoriesProduct, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly label?: string | null;
+  readonly Products: AsyncCollection<Product>;
+  readonly Sizes: AsyncCollection<Size>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type CategoriesProduct = LazyLoading extends LazyLoadingDisabled ? EagerCategoriesProduct : LazyCategoriesProduct
+
+export declare const CategoriesProduct: (new (init: ModelInit<CategoriesProduct>) => CategoriesProduct) & {
+  copyOf(source: CategoriesProduct, mutator: (draft: MutableModel<CategoriesProduct>) => MutableModel<CategoriesProduct> | void): CategoriesProduct;
+}
+
+type EagerProduct = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Product, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly label: string;
+  readonly stockID: string;
+  readonly categoriesproductID: string;
+  readonly ProductSizeQuantities?: (ProductSizeQuantity | null)[] | null;
+  readonly picture?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyProduct = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Product, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly label: string;
+  readonly stockID: string;
+  readonly categoriesproductID: string;
+  readonly ProductSizeQuantities: AsyncCollection<ProductSizeQuantity>;
+  readonly picture?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Product = LazyLoading extends LazyLoadingDisabled ? EagerProduct : LazyProduct
+
+export declare const Product: (new (init: ModelInit<Product>) => Product) & {
+  copyOf(source: Product, mutator: (draft: MutableModel<Product>) => MutableModel<Product> | void): Product;
+}
+
 type EagerAgent = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<Agent, 'id'>;
@@ -89,6 +249,7 @@ type EagerStock = {
   readonly name: string;
   readonly users?: (UserStock | null)[] | null;
   readonly Agents?: (Agent | null)[] | null;
+  readonly Products?: (Product | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -102,6 +263,7 @@ type LazyStock = {
   readonly name: string;
   readonly users: AsyncCollection<UserStock>;
   readonly Agents: AsyncCollection<Agent>;
+  readonly Products: AsyncCollection<Product>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
