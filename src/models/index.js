@@ -7,7 +7,7 @@ import { schema } from './schema';
 const { Supplier, ProductSizeQuantity, Size, CategoriesProduct, Product, Agent, User, Stock, UserStock } = initSchema(schema);
 
 export {
-  Supplier,
+  Supplier, feat/stocks-and-products
   ProductSizeQuantity,
   Size,
   CategoriesProduct,

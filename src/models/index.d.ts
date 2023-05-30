@@ -33,7 +33,6 @@ export declare type Supplier = LazyLoading extends LazyLoadingDisabled ? EagerSu
 export declare const Supplier: (new (init: ModelInit<Supplier>) => Supplier) & {
   copyOf(source: Supplier, mutator: (draft: MutableModel<Supplier>) => MutableModel<Supplier> | void): Supplier;
 }
-
 type EagerProductSizeQuantity = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<ProductSizeQuantity, 'id'>;
@@ -140,6 +139,7 @@ type EagerProduct = {
   readonly stockID: string;
   readonly categoriesproductID: string;
   readonly ProductSizeQuantities?: (ProductSizeQuantity | null)[] | null;
+
   readonly picture?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;

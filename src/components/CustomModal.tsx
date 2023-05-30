@@ -9,7 +9,7 @@ interface CustomModalProps {
 
 export default function CustomModal({isOpen, onClose, children, title}: CustomModalProps) {
     return (
-        <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
+        <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false} closeOnEsc={false}>
             <ModalOverlay/>
             <ModalContent>
                 <ModalHeader>{title}</ModalHeader>

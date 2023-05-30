@@ -1,8 +1,8 @@
+
 type Supplier @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String
 }
-
 type ProductSizeQuantity @model @auth(rules: [{allow: public}]) {
   id: ID!
   sizeID: ID! @index(name: "bySize")
