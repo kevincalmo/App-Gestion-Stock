@@ -93,7 +93,7 @@ export default function SingleAgent({user, stocks, agent}: { user: any, stocks: 
                 margin="10px 0"
                 onChange={(e) => setTelephone(e.target.value)}
                 disabled={!isEditing}
-                value={telephone} type="number"/>
+                value={telephone}/>
             <Flex>
                 <Button
                     marginRight={4}

@@ -1,0 +1,12 @@
+{
+  "resourceName": "s3appgestionstockstorage3b51b73d",
+  "bucketName": "app-gestion-stock-storage-3b51b73d",
+  "policyUUID": "94523e02",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ]
+}

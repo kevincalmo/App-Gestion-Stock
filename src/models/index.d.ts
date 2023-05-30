@@ -6,6 +6,33 @@ import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@a
 
 
 
+type EagerSupplier = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Supplier, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazySupplier = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Supplier, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly name?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Supplier = LazyLoading extends LazyLoadingDisabled ? EagerSupplier : LazySupplier
+
+export declare const Supplier: (new (init: ModelInit<Supplier>) => Supplier) & {
+  copyOf(source: Supplier, mutator: (draft: MutableModel<Supplier>) => MutableModel<Supplier> | void): Supplier;
+}
 type EagerProductSizeQuantity = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<ProductSizeQuantity, 'id'>;
@@ -112,6 +139,8 @@ type EagerProduct = {
   readonly stockID: string;
   readonly categoriesproductID: string;
   readonly ProductSizeQuantities?: (ProductSizeQuantity | null)[] | null;
+
+  readonly picture?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -126,6 +155,7 @@ type LazyProduct = {
   readonly stockID: string;
   readonly categoriesproductID: string;
   readonly ProductSizeQuantities: AsyncCollection<ProductSizeQuantity>;
+  readonly picture?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
