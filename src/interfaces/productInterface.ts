@@ -3,7 +3,8 @@ import {SizeProductInterface} from "@/interfaces/SizeProductInterface";
 export interface ProductInterface {
     id?: string;
     label: string;
-    categoryID: string;
+    categoriesproductID: string;
     stockID: string;
-    sizes: Array<SizeProductInterface>;
+    picture?:string;
+    sizes?: Array<SizeProductInterface>;
 }
