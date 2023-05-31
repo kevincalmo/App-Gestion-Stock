@@ -28,12 +28,15 @@
     "eslint-config-next": "13.4.1",
     "framer-motion": "^10.12.8",
     "next": "13.4.1",
+    "next-transpile-modules": "^10.0.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icon": "^1.0.0",
     "react-icons": "^4.8.0",
+    "react-select": "^5.7.3",
     "typescript": "5.0.4"
   },
+  "type": "module",
   "devDependencies": {
     "@storybook/addon-essentials": "^7.0.9",
     "@storybook/addon-interactions": "^7.0.9",
