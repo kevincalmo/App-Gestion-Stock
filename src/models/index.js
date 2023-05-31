@@ -4,9 +4,11 @@ import { schema } from './schema';
 
 
 
-const { Supplier, ProductSizeQuantity, Size, CategoriesProduct, Product, Agent, User, Stock, UserStock } = initSchema(schema);
+const { RemiseEpiItem, RemisesEpi, Supplier, ProductSizeQuantity, Size, CategoriesProduct, Product, Agent, User, Stock, UserStock } = initSchema(schema);
 
 export {
+  RemiseEpiItem,
+  RemisesEpi,
   Supplier,
   ProductSizeQuantity,
   Size,

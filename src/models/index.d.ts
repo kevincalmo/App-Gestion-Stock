@@ -6,6 +6,76 @@ import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@a
 
 
 
+type EagerRemiseEpiItem = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<RemiseEpiItem, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly quantity: number;
+  readonly description?: string | null;
+  readonly sizeID: string;
+  readonly productID: string;
+  readonly remisesepiID: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyRemiseEpiItem = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<RemiseEpiItem, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly quantity: number;
+  readonly description?: string | null;
+  readonly sizeID: string;
+  readonly productID: string;
+  readonly remisesepiID: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type RemiseEpiItem = LazyLoading extends LazyLoadingDisabled ? EagerRemiseEpiItem : LazyRemiseEpiItem
+
+export declare const RemiseEpiItem: (new (init: ModelInit<RemiseEpiItem>) => RemiseEpiItem) & {
+  copyOf(source: RemiseEpiItem, mutator: (draft: MutableModel<RemiseEpiItem>) => MutableModel<RemiseEpiItem> | void): RemiseEpiItem;
+}
+
+type EagerRemisesEpi = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<RemisesEpi, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly date?: string | null;
+  readonly agentID: string;
+  readonly stockID: string;
+  readonly RemiseEpiItems?: (RemiseEpiItem | null)[] | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyRemisesEpi = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<RemisesEpi, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly date?: string | null;
+  readonly agentID: string;
+  readonly stockID: string;
+  readonly RemiseEpiItems: AsyncCollection<RemiseEpiItem>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type RemisesEpi = LazyLoading extends LazyLoadingDisabled ? EagerRemisesEpi : LazyRemisesEpi
+
+export declare const RemisesEpi: (new (init: ModelInit<RemisesEpi>) => RemisesEpi) & {
+  copyOf(source: RemisesEpi, mutator: (draft: MutableModel<RemisesEpi>) => MutableModel<RemisesEpi> | void): RemisesEpi;
+}
+
 type EagerSupplier = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<Supplier, 'id'>;
@@ -33,6 +103,7 @@ export declare type Supplier = LazyLoading extends LazyLoadingDisabled ? EagerSu
 export declare const Supplier: (new (init: ModelInit<Supplier>) => Supplier) & {
   copyOf(source: Supplier, mutator: (draft: MutableModel<Supplier>) => MutableModel<Supplier> | void): Supplier;
 }
+
 type EagerProductSizeQuantity = {
   readonly [__modelMeta__]: {
     identifier: ManagedIdentifier<ProductSizeQuantity, 'id'>;
@@ -74,6 +145,7 @@ type EagerSize = {
   readonly label: string;
   readonly categoriesproductID: string;
   readonly ProductSizeQuantities?: (ProductSizeQuantity | null)[] | null;
+  readonly RemiseEpiItems?: (RemiseEpiItem | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -87,6 +159,7 @@ type LazySize = {
   readonly label: string;
   readonly categoriesproductID: string;
   readonly ProductSizeQuantities: AsyncCollection<ProductSizeQuantity>;
+  readonly RemiseEpiItems: AsyncCollection<RemiseEpiItem>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -139,8 +212,8 @@ type EagerProduct = {
   readonly stockID: string;
   readonly categoriesproductID: string;
   readonly ProductSizeQuantities?: (ProductSizeQuantity | null)[] | null;
-
   readonly picture?: string | null;
+  readonly RemiseEpiItems?: (RemiseEpiItem | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -156,6 +229,7 @@ type LazyProduct = {
   readonly categoriesproductID: string;
   readonly ProductSizeQuantities: AsyncCollection<ProductSizeQuantity>;
   readonly picture?: string | null;
+  readonly RemiseEpiItems: AsyncCollection<RemiseEpiItem>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -176,6 +250,7 @@ type EagerAgent = {
   readonly first_name: string;
   readonly telephon_number: string;
   readonly stockID: string;
+  readonly RemisesEPIS?: (RemisesEpi | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -190,6 +265,7 @@ type LazyAgent = {
   readonly first_name: string;
   readonly telephon_number: string;
   readonly stockID: string;
+  readonly RemisesEPIS: AsyncCollection<RemisesEpi>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -248,8 +324,9 @@ type EagerStock = {
   readonly id: string;
   readonly name: string;
   readonly users?: (UserStock | null)[] | null;
-  readonly Agents?: (Agent | null)[] | null;
-  readonly Products?: (Product | null)[] | null;
+  readonly Agents?: (RemisesEpi | null)[] | null;
+  readonly Products?: (RemisesEpi | null)[] | null;
+  readonly RemisesEPIS?: (RemisesEpi | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -262,8 +339,9 @@ type LazyStock = {
   readonly id: string;
   readonly name: string;
   readonly users: AsyncCollection<UserStock>;
-  readonly Agents: AsyncCollection<Agent>;
-  readonly Products: AsyncCollection<Product>;
+  readonly Agents: AsyncCollection<RemisesEpi>;
+  readonly Products: AsyncCollection<RemisesEpi>;
+  readonly RemisesEPIS: AsyncCollection<RemisesEpi>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

@@ -1,5 +1,226 @@
 export const schema = {
     "models": {
+        "RemiseEpiItem": {
+            "name": "RemiseEpiItem",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "quantity": {
+                    "name": "quantity",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "description": {
+                    "name": "description",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "sizeID": {
+                    "name": "sizeID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "productID": {
+                    "name": "productID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "remisesepiID": {
+                    "name": "remisesepiID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "RemiseEpiItems",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "bySize",
+                        "fields": [
+                            "sizeID"
+                        ]
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byProduct",
+                        "fields": [
+                            "productID"
+                        ]
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byRemisesEpi",
+                        "fields": [
+                            "remisesepiID"
+                        ]
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "RemisesEpi": {
+            "name": "RemisesEpi",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "date": {
+                    "name": "date",
+                    "isArray": false,
+                    "type": "AWSDate",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "agentID": {
+                    "name": "agentID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "stockID": {
+                    "name": "stockID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "RemiseEpiItems": {
+                    "name": "RemiseEpiItems",
+                    "isArray": true,
+                    "type": {
+                        "model": "RemiseEpiItem"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "remisesepiID"
+                        ]
+                    }
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "RemisesEpis",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byAgent",
+                        "fields": [
+                            "agentID"
+                        ]
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byStock",
+                        "fields": [
+                            "stockID"
+                        ]
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
         "Supplier": {
             "name": "Supplier",
             "fields": {
@@ -179,6 +400,22 @@ export const schema = {
                     "isArray": true,
                     "type": {
                         "model": "ProductSizeQuantity"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "sizeID"
+                        ]
+                    }
+                },
+                "RemiseEpiItems": {
+                    "name": "RemiseEpiItems",
+                    "isArray": true,
+                    "type": {
+                        "model": "RemiseEpiItem"
                     },
                     "isRequired": false,
                     "attributes": [],
@@ -386,6 +623,22 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "RemiseEpiItems": {
+                    "name": "RemiseEpiItems",
+                    "isArray": true,
+                    "type": {
+                        "model": "RemiseEpiItem"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "productID"
+                        ]
+                    }
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -483,6 +736,22 @@ export const schema = {
                     "type": "ID",
                     "isRequired": true,
                     "attributes": []
+                },
+                "RemisesEPIS": {
+                    "name": "RemisesEPIS",
+                    "isArray": true,
+                    "type": {
+                        "model": "RemisesEpi"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "agentID"
+                        ]
+                    }
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -682,7 +951,7 @@ export const schema = {
                     "name": "Agents",
                     "isArray": true,
                     "type": {
-                        "model": "Agent"
+                        "model": "RemisesEpi"
                     },
                     "isRequired": false,
                     "attributes": [],
@@ -698,7 +967,23 @@ export const schema = {
                     "name": "Products",
                     "isArray": true,
                     "type": {
-                        "model": "Product"
+                        "model": "RemisesEpi"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "stockID"
+                        ]
+                    }
+                },
+                "RemisesEPIS": {
+                    "name": "RemisesEPIS",
+                    "isArray": true,
+                    "type": {
+                        "model": "RemisesEpi"
                     },
                     "isRequired": false,
                     "attributes": [],
@@ -854,5 +1139,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.3",
-    "version": "17f142db8981c45d8a6650b660035dd2"
+    "version": "f0d7d93c86d0205c54eddc34b64f96b3"
 };
