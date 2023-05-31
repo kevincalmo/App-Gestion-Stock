@@ -14,12 +14,10 @@ import {
   Box,
   Button,
   Flex,
-  Heading,
   Input,
   Select,
   useDisclosure,
   Text,
-  Icon,
   IconButton,
   useToast,
 } from "@chakra-ui/react";
@@ -27,7 +25,6 @@ import CustomModal from "@/components/CustomModal";
 import { useEffect, useState } from "react";
 import { FiTrash } from "react-icons/fi";
 import { ProductInterface } from "@/interfaces/productInterface";
-import ProductComponent from "@/components/ProductComponent";
 import ProductViews from "@/components/ProductView";
 import Link from "next/link";
 
@@ -171,7 +168,7 @@ export default function Products({
             <>
             <ProductViews
               key={index}
-              id={product.id}
+              id={product.id!}
               label={product.label}
               picture={product.picture}
             />
